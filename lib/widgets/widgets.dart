@@ -23,10 +23,12 @@ const textInputDecoration = InputDecoration(
 );
 
 void nextScreen(context, page) {
+  //Empilha a nova tela
   Navigator.push(context, MaterialPageRoute(builder: (context) => page));
 }
 
 void nextScreenReplace(context, page) {
+  //Cria uma nova tela e apaga a antiga
   Navigator.pushReplacement(
       context, MaterialPageRoute(builder: (context) => page));
 }

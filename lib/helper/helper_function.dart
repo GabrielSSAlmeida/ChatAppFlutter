@@ -30,4 +30,14 @@ class HelperFunctions {
     return sp.getBool(userLoggedInKey);
     //Retorna null se nn existir
   }
+
+  static Future<String?> getUserEmailFromSp() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getString(userEmailKey);
+  }
+
+  static Future<String?> getUserNameFromSp() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getString(userNameKey);
+  }
 }
