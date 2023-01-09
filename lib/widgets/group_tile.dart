@@ -1,3 +1,4 @@
+import 'package:chatapp/service/database_service.dart';
 import 'package:chatapp/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -19,11 +20,35 @@ class GroupTile extends StatefulWidget {
 }
 
 class _GroupTileState extends State<GroupTile> {
+  String lastMessage = "";
+
+  @override
+  void initState() {
+    glastMessage();
+    super.initState();
+  }
+
+  String glastMessage() {
+    DatabaseService().getLastMessage(widget.groupId).then((value) {
+      setState(() {
+        lastMessage = value;
+      });
+    });
+
+    return lastMessage;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        nextScreen(context, const ChatPage());
+        nextScreen(
+            context,
+            ChatPage(
+              groupId: widget.groupId,
+              groupName: widget.groupName,
+              userName: widget.username,
+            ));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -47,9 +72,24 @@ class _GroupTileState extends State<GroupTile> {
             ),
           ),
           subtitle: Text(
-            "${widget.username} entrou no grupo",
+            glastMessage(),
             style: const TextStyle(fontSize: 13),
           ),
+
+          /* StreamBuilder(
+            stream: lastMessage,
+            builder: (context, snapshot) {
+              return snapshot.hasData
+                  ? Text(
+                      snapshot.data.toString(),
+                      style: TextStyle(fontSize: 13),
+                    )
+                  : const Text(
+                      "",
+                      style: TextStyle(fontSize: 13),
+                    );
+            },
+          ), */
         ),
       ),
     );
