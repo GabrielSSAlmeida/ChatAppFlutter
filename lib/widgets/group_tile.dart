@@ -1,5 +1,6 @@
 import 'package:chatapp/service/database_service.dart';
 import 'package:chatapp/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/chat_page.dart';
@@ -20,22 +21,22 @@ class GroupTile extends StatefulWidget {
 }
 
 class _GroupTileState extends State<GroupTile> {
-  String lastMessage = "";
+  Stream? lastMessage;
 
   @override
   void initState() {
-    glastMessage();
+    getlastMessage();
     super.initState();
   }
 
-  String glastMessage() {
-    DatabaseService().getLastMessage(widget.groupId).then((value) {
+  getlastMessage() {
+    DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+        .getGroupMembers(widget.groupId)
+        .then((value) {
       setState(() {
         lastMessage = value;
       });
     });
-
-    return lastMessage;
   }
 
   @override
@@ -71,25 +72,20 @@ class _GroupTileState extends State<GroupTile> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: Text(
-            glastMessage(),
-            style: const TextStyle(fontSize: 13),
-          ),
-
-          /* StreamBuilder(
+          subtitle: StreamBuilder(
             stream: lastMessage,
             builder: (context, snapshot) {
               return snapshot.hasData
                   ? Text(
-                      snapshot.data.toString(),
-                      style: TextStyle(fontSize: 13),
+                      snapshot.data['recentMessage'],
+                      style: const TextStyle(fontSize: 13),
                     )
                   : const Text(
                       "",
                       style: TextStyle(fontSize: 13),
                     );
             },
-          ), */
+          ),
         ),
       ),
     );

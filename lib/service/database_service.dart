@@ -145,10 +145,10 @@ class DatabaseService {
     });
   }
 
-  //Pegar a ultima mensagem do grupo
+  /* //Pegar a ultima mensagem do grupo
   Future getLastMessage(String groupId) async {
     DocumentReference groupDocumentReference = groupCollection.doc(groupId);
     DocumentSnapshot documentSnapshot = await groupDocumentReference.get();
     return documentSnapshot['recentMessage'];
-  }
+  } */
 }
